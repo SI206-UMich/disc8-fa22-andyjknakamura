@@ -1,3 +1,4 @@
+from urllib import request
 from bs4 import BeautifulSoup
 import requests
 import unittest
@@ -6,14 +7,25 @@ import unittest
 # search for the url in the University of Michgian wikipedia page (in the third pargraph of the intro)
 # HINT: You will have to add https://en.wikipedia.org to the URL retrieved using BeautifulSoup
 def getLink(soup):
-    
-    pass
+    link = soup.find("https://en.wikipedia.org/wiki/List_of_American_universities_with_Olympic_medalist_students_and_alumni")
+    return link
 
 # Task 3: Get the details from the box titled "College/school founding". Get all the college/school names and the year they were
 # founded and organize the same into key-value pairs.
 def getAdmissionsInfo2019(soup):
-
-    pass
+    dict = {}
+    tag = soup.find("table", class_="toccolours")
+    td_list = tag.find_all("td")
+    name_list = []
+    date_list = []
+    for td in td_list[::2]:
+        name_list.append(td - 1)
+        date_list.append(td)
+    
+    for i in range(len(name_list)):
+        dict[name_list[i]] = date_list[i]
+    
+    return dict
 
 
 
@@ -21,7 +33,9 @@ def main():
     # Task 1: Create a BeautifulSoup object and name it soup. Refer to discussion slides or lecture slides to complete this
 
     #### YOUR CODE HERE####
-
+    url = "https://en.wikipedia.org/wiki/University_of_Michigan"
+    resp = requests.get(url)
+    soup = BeautifulSoup(resp.text, 'html.parser')
     #Call the functions getLink(soup) and getAdmissionsInfo2019(soup) on your soup object.
     getLink(soup)
     getAdmissionsInfo2019(soup)
